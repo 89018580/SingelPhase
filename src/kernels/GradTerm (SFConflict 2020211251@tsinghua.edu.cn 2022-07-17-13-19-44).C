@@ -19,5 +19,5 @@ _velocity(getParam<RealVectorValue>("velocity"))
 ADReal
 GradTerm::computeQpResidual()
 {
-    return   _grad_u[_qp] * _velocity * _test[_qp][_i];
+    return   _grad_u[_qp] * _velocity * _test[_i][_qp];
 } 

@@ -19,5 +19,5 @@ ValTerm::computeQpResidual()
     ADReal W = 0.3911;
     ADReal q = 1273239.545;
     ADReal t = (q*Uh)/W;
-    return _test[_i][_qp] * t * (-1);
+    return _test[_i][_qp] * t * (-1.0);
 }

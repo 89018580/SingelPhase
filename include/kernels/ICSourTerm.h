@@ -1,14 +1,12 @@
 #pragma once
 #include "ADKernel.h"
-
-class GradTerm :public ADKernel
+class ICSourTerm: public ADKernel
 {
 public:
     static InputParameters validParams();
 
-    GradTerm(const InputParameters & parameters);
+    ICSourTerm(const InputParameters & parameters);
 
 protected:
     virtual ADReal computeQpResidual() override;
-    const RealVectorValue & _velocity;
 };

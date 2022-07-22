@@ -4,18 +4,20 @@ registerMooseObject("steadysingelphaseApp", GradTerm);
 InputParameters
 GradTerm::validParams()
 {
-    InputParameters params = ADKernelGrad::validParams();
+    InputParameters params = ADKernel::validParams();
     // params.addRequiredParam<RealVectorValue>("velocity", "Velocity Vector");
     params.addClassDescription("The grad term of the equation");
+    params.addRequiredParam<RealVectorValue>("velocity", "Just a vector to form REAL");
     return params;
 }
 
-GradTerm::GradTerm(const InputParameters & parameters): ADKernelGrad(parameters)
+GradTerm::GradTerm(const InputParameters & parameters): ADKernel(parameters),
+_velocity(getParam<RealVectorValue>("velocity"))
 {
 }
 
-ADRealVectorValue
-GradTerm::precomputeQpResidual()
+ADReal
+GradTerm::computeQpResidual()
 {
-    return   -1.0 * _u[_qp] ;
+    return   _test[_i][_qp] *  _grad_u[_qp] * _velocity ;
 }

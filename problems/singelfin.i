@@ -92,7 +92,7 @@
     automatic_scaling = true
     solve_type = 'JFNK'
     petsc_options = '-snes_converged_reason -ksp_converged_reason -snes_linesearch_monitor'
-    l_tol = 1e-20
+    l_tol = 1e-10
     nl_rel_tol = 1e-10
     nl_abs_tol = 1e-10
     line_search = 'none'

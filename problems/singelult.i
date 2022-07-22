@@ -10,80 +10,72 @@
     [H]
         order = FIRST
         family = LAGRANGE
-        initial_condition = 1133820.0
     []
     [P]
         order = FIRST
         family = LAGRANGE
-        initial_condition = 15500000.0
     []
 []
 
 [Kernels]
     [ker1]
-        type = GradTerm
-        variable = P
+        type = ConservativeAdvection
+        variable = H
         velocity = "1.0 1.0 1.0"
     []
     [ker2]
-        type = ICSourTerm
+        type = ConservativeAdvection
         variable = P
-    []
-    [ker3]
-        type = TimeTerm
-        variable = H
-    []
-    [ker4]
-        type = GradTerm
-        variable = H
         velocity = "1.0 1.0 1.0"
     []
-    [ker5]
+    [source1]
         type = ValTerm
         variable = H
     []
-    [ker6]
-        type = CoupledTimeTerm
-        variable = H
-        v = P
+    [source2]
+        type = SourTerm
+        variable = P
+        some_variable = H
     []
 []
 
 [BCs]
     [bc1]
-        type = DirichletBC
+        type = InflowBC
         variable = H
-        value = 1133820.0
+        inlet_conc = 1133820.0
         boundary = "left"
+        velocity = "1.0 1.0 1.0"
     []
     [bc2]
-        type = DirichletBC
+        type = OutflowBC
         variable = P
-        value = 15500000.0
+        outlet_conc = 15500000.0
         boundary = "right"
+        velocity = "1.0 1.0 1.0"
     []
 []
 
-#[VectorPostprocessors]
-  #[H]
-    #type = NodalValueSampler
-    #variable = H
+[VectorPostprocessors]
+  [H]
+    type = NodalValueSampler
+    variable = H
     #boundary = 'bottom'
-    #block = 0
-    #execute_on = 'initial timestep_end' 
-    #use_displaced_mesh = true
-    #sort_by = x
-  #[]
-  #[P]
-    #type = NodalValueSampler
-    #variable = P
+    block = 0
+    execute_on = 'initial timestep_end' 
+    use_displaced_mesh = true
+    sort_by = x
+  []
+  [P]
+    type = NodalValueSampler
+    variable = P
     #boundary = 'bottom'
-    #block = 0
-    #execute_on = 'initial timestep_end' 
-    #use_displaced_mesh = true
-    #sort_by = x
-  #[]
-#[]
+    block = 0
+    execute_on = 'initial timestep_end' 
+    use_displaced_mesh = true
+    sort_by = x
+  []
+[]
 
 [Problem]
     type = FEProblem
@@ -98,19 +90,16 @@
 []
 
 [Executioner]
-    type = Transient
+    type = Steady
     automatic_scaling = true
-    solve_type = 'JFNK'
-    shceme = bdf2
+    solve_type = 'NEWTON'
     petsc_options = '-snes_converged_reason -ksp_converged_reason -snes_linesearch_monitor'
     l_tol = 1e-10
     nl_rel_tol = 1e-10
-    nl_abs_tol = 1e-05
+    nl_abs_tol = 1e-10
     line_search = 'none'
     petsc_options_iname = '-pc_type -sub_pc_factor_levels -ksp_gmres_restart'
     petsc_options_value = 'asm  6  200'
-    num_steps = 135
-    dt = 0.01
     #petsc_options_iname = '-ksp_type -pc_type -pc_factor_shift_type -pc_factor_shift_amount -snes_linesearch_minlambda'
     #petsc_options_value = 'gmres lu NONZERO 1.e-10 1e-3'
     #petsc_options_iname = '-pc_type -pc_hypre_type -pc_hypre_boomeramg_strong_threshold'
